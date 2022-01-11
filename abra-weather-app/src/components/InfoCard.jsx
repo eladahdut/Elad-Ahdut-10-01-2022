@@ -16,7 +16,7 @@ export default function InfoCard() {
           />
           <span>
             Tel Aviv <br />
-            35 °c
+            35c°
           </span>
         </div>
         <div className="center">

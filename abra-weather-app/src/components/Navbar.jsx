@@ -1,5 +1,6 @@
 import "../App.css";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
@@ -22,12 +23,17 @@ export default function Navbar() {
         value={alignment}
         exclusive
         onChange={handleChange}>
-        <ToggleButton style={nonCapital} value="home">
-          Home
-        </ToggleButton>
-        <ToggleButton style={nonCapital} value="favorites">
-          Favorites
-        </ToggleButton>
+        <Link to="/">
+          <ToggleButton style={nonCapital} value="home">
+            Home
+          </ToggleButton>
+        </Link>
+
+        <Link to="/favorites">
+          <ToggleButton style={nonCapital} value="favorites">
+            Favorites
+          </ToggleButton>
+        </Link>
       </ToggleButtonGroup>
     </div>
   );
