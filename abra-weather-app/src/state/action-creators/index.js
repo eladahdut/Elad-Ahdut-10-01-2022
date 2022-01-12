@@ -1,17 +1,26 @@
-export const x = (amount) => {
+export const updateAutoComplete = (locations) => {
     return (dispatch) => {
         dispatch({
-            type: "x",
-            payload: amount
+            type: "updateAutoComplete",
+            payload: locations
         })
     }
 }
 
-export const y = (amount) => {
+export const updateCurrCondition = (info) => {
     return (dispatch) => {
         dispatch({
-            type: "y",
-            payload: amount
+            type: "updateCurrCondition",
+            payload: info
+        })
+    }
+}
+
+export const updateCurrCityKey = (key) => {
+    return (dispatch) => {
+        dispatch({
+            type: "updateCurrCityKey",
+            payload: key
         })
     }
 }

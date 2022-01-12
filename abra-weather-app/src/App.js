@@ -7,17 +7,17 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux"
-import { bindActionCreators } from "redux"
-import { actionCreators } from "./state/index"
+// import { useSelector, useDispatch } from "react-redux"
+// import { bindActionCreators } from "redux"
+// import { actionCreators } from "./state/index"
 
 function App() {
 
-  const state = useSelector((state) => state)
-  console.log(state);
-  const dispatch = useDispatch()
-  const { x, y } = bindActionCreators(actionCreators, dispatch)
-  console.log(x, y);
+  // const state = useSelector((state) => state)
+  // console.log(state);
+  // const dispatch = useDispatch()
+  // const { x, y } = bindActionCreators(actionCreators, dispatch)
+  // console.log(x, y);
 
   return (
     <Router>

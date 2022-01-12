@@ -17,7 +17,7 @@ body {
 
 body {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-family: "Oswald", sans-serif;
   background-image: linear-gradient(white, rgb(117, 16, 247));
   background-attachment: fixed;
@@ -104,5 +104,5 @@ main {
   border: 2px solid black;
   width: 18rem;
   min-height: 250px;
-  margin: 5rem;
+  margin: 5rem 1rem 0rem 1rem;
 }
