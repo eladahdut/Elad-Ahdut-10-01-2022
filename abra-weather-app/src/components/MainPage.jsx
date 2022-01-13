@@ -1,17 +1,16 @@
-import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import InfoCard from "./InfoCard";
 import { debounce } from "lodash";
-import Autocomplete from "@mui/material/Autocomplete";
 import { getAutoComplete, getCurrentCondition } from "../API/getApi";
-
+import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../state/index";
 
 export default function MainPage() {
   const [inputValue, setInputValue] = useState("");
-  const [results, setResults] = useState(["Tel Aviv"]);
+  const [hideMenu, setHideMenu] = useState(true);
+  const inputRef = useRef(null);
 
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -23,67 +22,81 @@ export default function MainPage() {
   } = bindActionCreators(actionCreators, dispatch);
 
   useEffect(() => {
-    async function fetchAutoComplete() {
-      const options = await getAutoComplete(inputValue);
-
-      updateAutoComplete(options);
-      if (state.weatherObject.autoCompleteLocations) {
-        let res = [];
-        state.weatherObject.autoCompleteLocations.map((item) =>
-          res.push({
-            id: item.Country.ID,
-            name: item.LocalizedName,
-            key: item.Key,
-          })
-        );
-        setResults(res);
-      }
-    }
-
     async function fetchCurrentWeather() {
       const condition = await getCurrentCondition(
         state.weatherObject.currCityKey
       );
       updateCurrCondition(condition);
     }
-
-    fetchAutoComplete();
     fetchCurrentWeather();
-  }, [inputValue, state.weatherObject.currCityKey]);
+  }, [state.weatherObject.currCityKey]);
 
-  async function getCityKeyAndName(key) {
-    results.map((city) => {
-      if (`${city.name}, ${city.id}` === key) {
-        updateCurrCityKey(city.key);
-        updateCurrLocation(`${city.name}, ${city.id}`);
-      }
-    });
+  async function getCityKeyAndName(location) {
+    const found = state.weatherObject.autoCompleteLocations.find(
+      (item) => item.Key === location.Key
+    );
+    if (found) {
+      updateCurrCityKey(found.Key);
+      updateCurrLocation(`${found.LocalizedName}, ${found.Country.ID}`);
+    }
   }
 
-  return (
-    <div className="main-page">
-      <Autocomplete
-        sx={{ width: "50%" }}
-        options={
-          results ? results.map((option) => `${option.name}, ${option.id}`) : ""
+  function checkChars(inputValue) {
+    setInputValue(inputValue);
+    let res = /^([a-zA-Z]+\s)*[a-zA-Z]+$/.test(inputValue);
+    if (res || inputValue.length === 0) {
+      getAutoComplete(inputValue).then((data) => {
+        if (data.length) {
+          setHideMenu(false);
+        } else {
+          setHideMenu(true);
         }
-        onChange={(event, value) => {
-          getCityKeyAndName(value);
+        updateAutoComplete(data);
+      });
+    } else {
+      inputRef.current.value = "";
+    }
+  }
+  return (
+    <div
+      className="main-page"
+      onClick={(e) => {
+        e.stopPropagation();
+        setHideMenu(true);
+      }}>
+      <input
+        className="user-input"
+        placeholder="Search.. For example Tel Aviv"
+        ref={inputRef}
+        type="text"
+        onClick={(e) => {
+          e.preventDefault();
+          checkChars(inputValue);
         }}
-        renderInput={(params) => (
-          <TextField
-            onKeyUp={debounce((e) => setInputValue(e.target.value, e), 2000)}
-            type="search"
-            label="Search.."
-            variant="outlined"
-            placeholder="For example.. Tel Aviv"
-            {...params}
-            InputProps={{
-              ...params.InputProps,
-            }}
-          />
-        )}
+        onInput={debounce((e) => {
+          e.preventDefault();
+          checkChars(e.target.value);
+        }, 2000)}
       />
+      {!hideMenu ? (
+        <div className="autocomplete-container">
+          {state.weatherObject.autoCompleteLocations.map((item, index) => {
+            return (
+              <span
+                className="autocomplete-span"
+                onClick={() => {
+                  getCityKeyAndName(item);
+                  setHideMenu(true);
+                }}
+                key={
+                  index
+                }>{`${item.Country.ID}, ${item.Country.LocalizedName}`}</span>
+            );
+          })}
+        </div>
+      ) : (
+        <></>
+      )}
       <br />
       <InfoCard />
     </div>

@@ -18,7 +18,8 @@ body {
 body {
   margin: 0;
   font-size: 1.3rem;
-  font-family: "Oswald", sans-serif;
+  font-family: "Poppins", sans-serif;
+  /* font-family: "Oswald", sans-serif; */
   background-image: linear-gradient(
     to bottom right,
     white,
@@ -44,6 +45,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1.5px solid rgb(116 17 247 / 25%);
+  padding-bottom: 0.5rem;
+  box-shadow: 5px 10px #6617ae3d;
 }
 .main-page {
   margin-top: 5rem;
@@ -54,8 +58,9 @@ main {
 }
 
 .info-card-box {
-  border: 2px solid black;
+  border: 1px solid azure;
   width: 85%;
+  box-shadow: 5px 10px #6617ae3d;
 }
 
 .top-forecast {
@@ -118,4 +123,40 @@ main {
   width: 18rem;
   min-height: 250px;
   margin: 5rem 1rem 0rem 1rem;
+}
+
+.user-input {
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem;
+  border-radius: 0.2rem;
+  background-color: rgb(255, 255, 255);
+  border: none;
+  width: 45%;
+  display: block;
+  /* border-bottom: 0.3rem solid transparent; */
+  transition: all 0.3s;
+  box-shadow: 5px 5px #6617ae3d;
+}
+
+.autocomplete-container {
+  width: 20%;
+  border: 1.5px solid rgb(117 16 247 / 25%);
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+  border-radius: 3px;
+  background: #ffffff80;
+  color: rgb(71 1 161);
+}
+
+.autocomplete-span {
+  text-align: center;
+  margin: 4px 0px 2px 0px;
+  font-size: 19px;
+}
+.autocomplete-span:hover {
+  background-color: azure;
+  border-radius: 2px;
+  color: black;
+  cursor: pointer;
 }

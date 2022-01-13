@@ -7,22 +7,14 @@ import { getFiveDays } from "../API/getApi";
 import { actionCreators } from "../state/index";
 import Brightness2Icon from "@mui/icons-material/Brightness2";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import Snackbar from "@mui/material/Snackbar";
-import Slide from "@mui/material/Slide";
-
-function TransitionUp(props) {
-  return <Slide {...props} direction="up" />;
-}
 
 export default function InfoCard() {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { updateForecast, addDelFavorite } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
-  const [open, setOpen] = useState(false);
-  const [transition, setTransition] = useState(undefined);
+  const { updateForecast, addToFavorites, delFromFavorites } =
+    bindActionCreators(actionCreators, dispatch);
+  const [flag, setFlag] = useState(false);
+
   const cityName = state?.weatherObject?.currLocation;
   const temp = state?.weatherObject?.currCondition[0]?.Temperature.Metric.Value;
   const tempText = state?.weatherObject?.currCondition[0]?.WeatherText;
@@ -31,24 +23,22 @@ export default function InfoCard() {
     "text-transform": "none",
   };
 
-  const handleClick = (Transition) => () => {
-    setTransition(() => Transition);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   useEffect(() => {
     async function fetchFiveDaysForecast() {
       const forecast = await getFiveDays(state.weatherObject.currCityKey);
+      const isFavorite = state.weatherObject.favorites.find(
+        (cityKey) => cityKey.currCityKey === state.weatherObject.currCityKey
+      );
+      if (isFavorite) {
+        setFlag(true);
+      }
       updateForecast(forecast);
     }
     fetchFiveDaysForecast();
   }, [state.weatherObject.currCityKey]);
 
   async function handleFavorite() {
+    setFlag(!flag);
     let favCityObj = {
       currCityKey: Number(state.weatherObject.currCityKey),
       currCondition: state.weatherObject.currCondition,
@@ -58,18 +48,9 @@ export default function InfoCard() {
       (cityKey) => cityKey.currCityKey === favCityObj.currCityKey
     );
     if (exists) {
-      return (
-        <Snackbar
-          open={open}
-          onClose={handleClose}
-          TransitionComponent={transition}
-          message="Already in favorites!"
-          key={transition ? transition.name : ""}
-        />
-      );
-    } else addDelFavorite(favCityObj);
+      delFromFavorites(favCityObj.currCityKey);
+    } else addToFavorites(favCityObj);
   }
-
   return (
     <div className="info-card-box">
       <div className="top-forecast">
@@ -80,7 +61,11 @@ export default function InfoCard() {
           </h2>
         </div>
         <div className="center">
-          <FavoriteBorderIcon />
+          {flag ? (
+            <FavoriteBorderIcon htmlColor="red" />
+          ) : (
+            <FavoriteBorderIcon htmlColor="black" />
+          )}
           <Button
             onClick={handleFavorite}
             style={{

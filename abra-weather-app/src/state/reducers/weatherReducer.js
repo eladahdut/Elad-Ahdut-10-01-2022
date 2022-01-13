@@ -25,10 +25,15 @@ const reducer = (state = initState, action) => {
         case "updateForecast":
             return { ...state, forecast: action.payload };
 
-        case "addDelFavorite":
+        case "addToFavorites":
             return {
                 ...state,
                 favorites: [ ...state.favorites, action.payload ]
+            };
+        case "delFromFavorites":
+            return {
+                ...state,
+                favorites: state.favorites.filter(item => item.currCityKey !== action.payload)
             };
 
         default:

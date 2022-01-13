@@ -1,4 +1,5 @@
 export const updateAutoComplete = (locations) => {
+    console.log(locations);
     return (dispatch) => {
         dispatch({
             type: "updateAutoComplete",
@@ -41,11 +42,19 @@ export const updateForecast = (info) => {
         })
     }
 }
-export const addDelFavorite = (info) => {
+export const addToFavorites = (info) => {
     return (dispatch) => {
         dispatch({
-            type: "addDelFavorite",
+            type: "addToFavorites",
             payload: info
+        })
+    }
+}
+export const delFromFavorites = (cityKey) => {
+    return (dispatch) => {
+        dispatch({
+            type: "delFromFavorites",
+            payload: cityKey
         })
     }
 }
