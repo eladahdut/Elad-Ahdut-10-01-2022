@@ -3,7 +3,7 @@ const initState = {
     currLocation: "Tel Aviv, IL",
     currCondition: {},
     currCityKey: 215854,
-    weather: [],
+    forecast: [],
     favorites: [],
 
 };
@@ -18,6 +18,18 @@ const reducer = (state = initState, action) => {
 
         case "updateCurrCityKey":
             return { ...state, currCityKey: action.payload };
+
+        case "updateCurrLocation":
+            return { ...state, currLocation: action.payload };
+
+        case "updateForecast":
+            return { ...state, forecast: action.payload };
+
+        case "addDelFavorite":
+            return {
+                ...state,
+                favorites: [ ...state.favorites, action.payload ]
+            };
 
         default:
             return state

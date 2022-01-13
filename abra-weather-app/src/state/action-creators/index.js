@@ -24,3 +24,28 @@ export const updateCurrCityKey = (key) => {
         })
     }
 }
+export const updateCurrLocation = (name) => {
+    return (dispatch) => {
+        dispatch({
+            type: "updateCurrLocation",
+            payload: name
+        })
+    }
+}
+
+export const updateForecast = (info) => {
+    return (dispatch) => {
+        dispatch({
+            type: "updateForecast",
+            payload: info
+        })
+    }
+}
+export const addDelFavorite = (info) => {
+    return (dispatch) => {
+        dispatch({
+            type: "addDelFavorite",
+            payload: info
+        })
+    }
+}

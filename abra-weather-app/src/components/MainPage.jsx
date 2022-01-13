@@ -12,14 +12,15 @@ import { actionCreators } from "../state/index";
 export default function MainPage() {
   const [inputValue, setInputValue] = useState("");
   const [results, setResults] = useState(["Tel Aviv"]);
-  const [CityName, setCityName] = useState("Tel Aviv, IL");
-  // const [currentCityKey, setCurrentCityKey] = useState(215854);
-  // const [currentCityInfo, setCurrentCityInfo] = useState([]);
 
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { updateAutoComplete, updateCurrCondition, updateCurrCityKey } =
-    bindActionCreators(actionCreators, dispatch);
+  const {
+    updateAutoComplete,
+    updateCurrCondition,
+    updateCurrCityKey,
+    updateCurrLocation,
+  } = bindActionCreators(actionCreators, dispatch);
 
   useEffect(() => {
     async function fetchAutoComplete() {
@@ -48,18 +49,16 @@ export default function MainPage() {
 
     fetchAutoComplete();
     fetchCurrentWeather();
-  }, [inputValue, state.weatherObject.currCityKey]); //currentCityKey
+  }, [inputValue, state.weatherObject.currCityKey]);
 
-  async function getCityKey(key) {
-    console.log(key);
+  async function getCityKeyAndName(key) {
     results.map((city) => {
       if (`${city.name}, ${city.id}` === key) {
         updateCurrCityKey(city.key);
+        updateCurrLocation(`${city.name}, ${city.id}`);
       }
     });
   }
-
-  console.log(state);
 
   return (
     <div className="main-page">
@@ -69,8 +68,7 @@ export default function MainPage() {
           results ? results.map((option) => `${option.name}, ${option.id}`) : ""
         }
         onChange={(event, value) => {
-          getCityKey(value);
-          setCityName(value);
+          getCityKeyAndName(value);
         }}
         renderInput={(params) => (
           <TextField
@@ -87,8 +85,7 @@ export default function MainPage() {
         )}
       />
       <br />
-      <InfoCard city={CityName} />
-      {/* data={currentCityInfo} */}
+      <InfoCard />
     </div>
   );
 }
