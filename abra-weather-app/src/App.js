@@ -7,17 +7,10 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux"
-// import { bindActionCreators } from "redux"
-// import { actionCreators } from "./state/index"
+
 
 function App() {
 
-  // const state = useSelector((state) => state)
-  // console.log(state);
-  // const dispatch = useDispatch()
-  // const { x, y } = bindActionCreators(actionCreators, dispatch)
-  // console.log(x, y);
 
   return (
     <Router>
@@ -26,6 +19,7 @@ function App() {
         <Routes>
           <Route exact path='/' element={<MainPage />} />
           <Route path='/favorites' element={<FavoritesPage />} />
+          <Route path="*" element={<MainPage />} />
         </Routes>
       </main>
     </Router>
