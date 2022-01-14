@@ -1,14 +1,39 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getFiveDays } from "../API/getApi";
 import { actionCreators } from "../state/index";
 import Brightness2Icon from "@mui/icons-material/Brightness2";
 import LightModeIcon from "@mui/icons-material/LightMode";
+//
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+//
 
 export default function InfoCard() {
+  //
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  //
+
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const { updateForecast, addToFavorites, delFromFavorites } =
@@ -62,12 +87,41 @@ export default function InfoCard() {
         </div>
         <div className="center">
           {flag ? (
-            <FavoriteBorderIcon htmlColor="red" />
+            <>
+              <FavoriteBorderIcon htmlColor="red" />
+              <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}>
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  sx={{ width: "100%" }}>
+                  Location added favorites!
+                </Alert>
+              </Snackbar>
+            </>
           ) : (
-            <FavoriteBorderIcon htmlColor="black" />
+            <>
+              <FavoriteBorderIcon htmlColor="black" />
+              <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}>
+                <Alert
+                  onClose={handleClose}
+                  severity="error"
+                  sx={{ width: "100%" }}>
+                  Location removed from favorites!
+                </Alert>
+              </Snackbar>
+            </>
           )}
           <Button
-            onClick={handleFavorite}
+            onClick={() => {
+              handleFavorite();
+              handleClick();
+            }}
             style={{
               nonCapital,
               marginLeft: "10px",
@@ -75,7 +129,7 @@ export default function InfoCard() {
               borderColor: "white ",
             }}
             variant="outlined">
-            Add to favorites
+            {!flag ? "add to favorites" : "remove from favorites"}
           </Button>
         </div>
       </div>

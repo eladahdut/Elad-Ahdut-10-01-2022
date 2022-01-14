@@ -88,9 +88,7 @@ export default function MainPage() {
                   getCityKeyAndName(item);
                   setHideMenu(true);
                 }}
-                key={
-                  index
-                }>{`${item.Country.ID}, ${item.Country.LocalizedName}`}</span>
+                key={index}>{`${item.LocalizedName}, ${item.Country.ID}`}</span>
             );
           })}
         </div>
