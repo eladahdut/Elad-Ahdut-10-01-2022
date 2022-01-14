@@ -1,32 +1,34 @@
 import React from "react";
-// import { useHistory } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
-// import { bindActionCreators } from "redux";
-// import { actionCreators } from "../state/index";
-// import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import { actionCreators } from "../state/index";
+import { useNavigate } from "react-router-dom";
 
 export default function FavoriteCard(props) {
-  // const state = useSelector((state) => state);
-  // const dispatch = useDispatch();
-  // const { updateCurrCityKey, updateCurrLocation } = bindActionCreators(
-  //   actionCreators,
-  //   dispatch
-  // );
+  const dispatch = useDispatch();
+  const { updateCurrCityKey, updateCurrLocation } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+  const navigate = useNavigate();
 
-  // const history = useHistory();
-  // const navigate = useNavigate();
-
-  // const handleFavoriteClick = (currCityKey) => {
-  //   updateCurrCityKey(currCityKey);
-  //   navigate("/");
-  // };
-
-  console.log(props.item);
+  /**
+   * listen to a click on card and updates store and navigate to home with selected location .
+   *
+   * @param  currCityKey
+   * @param  currLocation
+   */
+  const handleFavoriteClick = (currCityKey, currLocation) => {
+    updateCurrCityKey(currCityKey);
+    updateCurrLocation(currLocation);
+    navigate("/");
+  };
   return (
     <div
       className="favorite-card"
-      // onClick={handleFavoriteClick(props.item.currCityKey)}
-    >
+      onClick={() =>
+        handleFavoriteClick(props.item.currCityKey, props.item.currLocation)
+      }>
       <h2>{props.item.currLocation}</h2>
       <div style={{ textAlign: "center" }}>
         <span>

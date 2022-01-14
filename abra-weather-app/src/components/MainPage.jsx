@@ -23,6 +23,7 @@ export default function MainPage() {
 
   useEffect(() => {
     async function fetchCurrentWeather() {
+      //fetch the current conditions in specific location
       const condition = await getCurrentCondition(
         state.weatherObject.currCityKey
       );
@@ -31,6 +32,11 @@ export default function MainPage() {
     fetchCurrentWeather();
   }, [state.weatherObject.currCityKey]);
 
+  /**
+   * extracting the city key and name for further api requests and update storage.
+   *
+   * @param  location   the location as a string
+   */
   async function getCityKeyAndName(location) {
     const found = state.weatherObject.autoCompleteLocations.find(
       (item) => item.Key === location.Key
@@ -41,6 +47,11 @@ export default function MainPage() {
     }
   }
 
+  /**
+   * check if input is valid(english characters only) and setting its value to state.
+   *
+   * @param  inputValue   user's input
+   */
   function checkChars(inputValue) {
     setInputValue(inputValue);
     let res = /^([a-zA-Z]+\s)*[a-zA-Z]+$/.test(inputValue);

@@ -55,6 +55,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .info-card-box {
@@ -139,14 +140,17 @@ main {
 }
 
 .autocomplete-container {
-  width: 20%;
+  position: absolute;
+  top: 64px;
+  width: 496px;
   border: 1.5px solid rgb(117 16 247 / 25%);
   display: flex;
   flex-direction: column;
   margin-top: 2px;
-  border-radius: 3px;
-  background: #ffffff80;
-  color: rgb(71 1 161);
+  border-radius: 7px;
+  background: #ffffffd1;
+  color: rgb(141 32 209);
+  box-shadow: 5px 5px 19px;
 }
 
 .autocomplete-span {

@@ -7,32 +7,24 @@ import { getFiveDays } from "../API/getApi";
 import { actionCreators } from "../state/index";
 import Brightness2Icon from "@mui/icons-material/Brightness2";
 import LightModeIcon from "@mui/icons-material/LightMode";
-//
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-//
 
 export default function InfoCard() {
-  //
   const [open, setOpen] = useState(false);
-
   const handleClick = () => {
     setOpen(true);
   };
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
-
-  //
 
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -44,24 +36,27 @@ export default function InfoCard() {
   const temp = state?.weatherObject?.currCondition[0]?.Temperature.Metric.Value;
   const tempText = state?.weatherObject?.currCondition[0]?.WeatherText;
   const forecast = state?.weatherObject?.forecast.DailyForecasts;
-  const nonCapital = {
-    "text-transform": "none",
-  };
 
   useEffect(() => {
     async function fetchFiveDaysForecast() {
+      //fetch the forecast for 5 days and update the state, also set flag for favorite locations
       const forecast = await getFiveDays(state.weatherObject.currCityKey);
       const isFavorite = state.weatherObject.favorites.find(
-        (cityKey) => cityKey.currCityKey === state.weatherObject.currCityKey
+        (cityKey) => +cityKey.currCityKey === +state.weatherObject.currCityKey
       );
       if (isFavorite) {
         setFlag(true);
+      } else {
+        setFlag(false);
       }
       updateForecast(forecast);
     }
     fetchFiveDaysForecast();
-  }, [state.weatherObject.currCityKey]);
+  }, [state.weatherObject.currCityKey, cityName]);
 
+  /**
+   * listen to a click on favorites button and updates store as if to add or remove from favorites.
+   */
   async function handleFavorite() {
     setFlag(!flag);
     let favCityObj = {
@@ -86,22 +81,7 @@ export default function InfoCard() {
           </h2>
         </div>
         <div className="center">
-          {flag ? (
-            <>
-              <FavoriteBorderIcon htmlColor="red" />
-              <Snackbar
-                open={open}
-                autoHideDuration={3000}
-                onClose={handleClose}>
-                <Alert
-                  onClose={handleClose}
-                  severity="success"
-                  sx={{ width: "100%" }}>
-                  Location added favorites!
-                </Alert>
-              </Snackbar>
-            </>
-          ) : (
+          {!flag ? (
             <>
               <FavoriteBorderIcon htmlColor="black" />
               <Snackbar
@@ -116,6 +96,21 @@ export default function InfoCard() {
                 </Alert>
               </Snackbar>
             </>
+          ) : (
+            <>
+              <FavoriteBorderIcon htmlColor="red" />
+              <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}>
+                <Alert
+                  onClose={handleClose}
+                  severity="success"
+                  sx={{ width: "100%" }}>
+                  Location added favorites!
+                </Alert>
+              </Snackbar>
+            </>
           )}
           <Button
             onClick={() => {
@@ -123,7 +118,6 @@ export default function InfoCard() {
               handleClick();
             }}
             style={{
-              nonCapital,
               marginLeft: "10px",
               color: "black",
               borderColor: "white ",
